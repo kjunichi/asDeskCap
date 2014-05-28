@@ -1,0 +1,21 @@
+{
+  "name": "asDeskCap",
+  "version": "0.0.0",
+  "description": "koatest =======",
+  "main": "main.js",
+  "dependencies": {
+    "co-busboy": "^1.0.2",
+    "co-fs": "^1.2.0",
+    "koa": "^0.6.1",
+    "koa-logger": "^1.2.1",
+    "koa-static": "^1.4.5",
+    "save-to": "^1.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "MIT"
+}

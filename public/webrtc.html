@@ -1,0 +1,100 @@
+<html>
+<meta charset="UTF-8">
+<button onClick="start()">start</button>
+<button onClick="stop()">stop</button>
+<div id="out"></div>
+<script src="RecordRTC.js"></script>
+<script>
+var localStream;
+
+function start() {
+var out = document.getElementById("out");
+      out.innerHTML = "Capture start!";
+      
+    if (navigator.webkitGetUserMedia) {
+        navigator.webkitGetUserMedia({
+            audio: false,
+            video: {
+                mandatory: {
+                    chromeMediaSource: 'screen',
+                    minWidth: 1280,
+                    maxWidth: 2560,
+                    minHeight: 720,
+                    maxHeight: 1440
+                }
+            }
+        }, function (stream) {
+        	localStream = stream;
+        	window.recordRTC = RecordRTC(localStream,{type:"video",video: {
+      width: 640,
+      height: 480
+   },
+   canvas: {
+      width: 640,
+      height: 480
+   }
+   });
+        	recordRTC.startRecording();
+            var url = window.webkitURL.createObjectURL(stream);
+            //video.src = url;
+            //video.play();
+            
+    
+        }, function (error) {});
+    } else if (navigator.mozGetUserMedia) {
+        navigator.mozGetUserMedia({
+                video: true
+            },
+            function (stream) {
+
+                //video.mozSrcObject = stream;
+                //video.play();
+                streaming = true;
+            },
+            function (err) {
+                alert("An error occured! " + err);
+            }
+        );
+    } else if (navigator.getUserMedia) {
+        navigator.getUserMedia("audio, video", success, error);
+    }
+}
+
+
+function stop() {
+    if (navigator.webkitGetUserMedia) {
+    	localStream.stop();
+
+    	recordRTC.stopRecording();
+    	var blob = recordRTC.getBlob();
+    	
+    	var req = new XMLHttpRequest();
+
+		req.open("POST", "https://localhost:4430/", true);
+  req.onreadystatechange = function() {
+    //readyState値は4で受信完了
+    if (req.readyState == 4) {
+      //コールバック
+      //on_loaded(http);
+      console.log("responseText" + req.responseText);
+      var out = document.getElementById("out");
+      out.innerHTML = "File Uploaded.!";
+    }
+  };
+  
+  var formData = new FormData();
+  formData.enctype = "multipart/form-data";
+  formData.append("theFile",blob,"capture.webm");
+  req.send(formData);
+  
+}
+
+
+    if (video.mozSrcObject) {
+        //video.mozSrcObject.stop();
+        //video.mozSrcObject = null;
+    }
+}
+</script>
+
+</html>
