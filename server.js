@@ -11,10 +11,13 @@ var app = koa();
 
 function addVideo(path) {
  var vtag = document.createElement("video");
- vtag.src=path.replace("C:/work/atomShell/desktopCap/uploads/","/uploads/");
+ vtag.src="http://localhost:3000"+path.replace(__dirname+"/public/uploads","/uploads");
+ console.log("v.src = "+vtag.src);
+ vtag.setAttribute("controls","");
  var list = document.getElementById("videos");
+
  list.appendChild(vtag);
- 
+
 }
 // log requests
 
@@ -46,7 +49,11 @@ app.use(function *(next){
     var stream = fs.createWriteStream(__dirname + '/public/uploads/' + Math.random()+"_"+part.filename);
     part.pipe(stream);
     console.log('uploading %s -> %s', part.filename, stream.path);
-    addVideo(stream.path);
+    stream.on('finish',function() {
+      
+      addVideo(stream.path);
+    })
+
   }
 
   this.redirect('/');
