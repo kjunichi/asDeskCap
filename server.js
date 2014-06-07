@@ -50,7 +50,8 @@ app.use(function *(next){
     part.pipe(stream);
     console.log('uploading %s -> %s', part.filename, stream.path);
     stream.on('finish',function() {
-      
+      // Chromeブラウザを終了させる
+      procKillChrome();
       addVideo(stream.path);
     })
 

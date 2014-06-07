@@ -1,0 +1,41 @@
+
+<html>
+<video id="video" autoplay></video>
+
+<button onclick="test();">test</button>
+
+<script>
+
+
+var extId = "epjeijdoohfiilgnaohkhlpijdbfaoeo";
+
+function getUserMediaError(err) {
+console.log("getUserMedia() failed.");
+console.dir(err);
+}
+
+function gotStream(stream) {
+console.log("Received local stream");
+var video = document.querySelector("video");
+video.src = URL.createObjectURL(stream);
+localstream = stream;
+stream.onended = function() { console.log("Ended"); };
+}
+
+function test() {
+
+chrome.runtime.sendMessage(extId, { getStream: true},
+function(response) {
+console.log("Response from extension: " + response);
+console.dir(response);
+console.log(response.mediaid);
+navigator.webkitGetUserMedia({
+audio:false,
+video: { mandatory: { chromeMediaSource: "desktop",
+chromeMediaSourceId: response.mediaid } }
+}, gotStream, getUserMediaError);
+});
+}
+
+</script>
+</html>
