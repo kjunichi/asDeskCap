@@ -1,17 +1,33 @@
 var ipc = require('ipc');
 var fs = require('fs');
 var spawn = require('child_process').spawn;
+var remote = require('remote');
+
+function addVideo(path) {
+  var vtag = document.createElement("video");
+  vtag.src = "http://localhost:3000" + path.replace(__dirname + "/public/uploads", "/uploads");
+  console.log("v.src = " + vtag.src);
+  vtag.setAttribute("controls", "");
+  var list = document.getElementById("videos");
+
+  list.appendChild(vtag);
+
+  // ウィンドウを前面にもってくる
+  remote.getCurrentWindow().hide();
+  remote.getCurrentWindow().show();
+
+}
 
 function getWin32ChromePath() {
   var path = [
     process.env.LOCALAPPDATA + "\\Google\\Chrome\\Application\\chrome.exe",
-      process.env.ProgramFiles + "\\Google\\Chrome\\Application\\chrome.exe"
-    ];
+    process.env.ProgramFiles + "\\Google\\Chrome\\Application\\chrome.exe"
+  ];
 
-  for(var i = 0; i < path.length; i++) {
-      if(fs.existsSync(path[i])) {
-        return path[i];
-      }
+  for (var i = 0; i < path.length; i++) {
+    if (fs.existsSync(path[i])) {
+      return path[i];
+    }
   }
   return null;
 }

@@ -9,16 +9,7 @@ var koa = require('koa');
 var fs = require('fs');
 var app = koa();
 
-function addVideo(path) {
- var vtag = document.createElement("video");
- vtag.src="http://localhost:3000"+path.replace(__dirname+"/public/uploads","/uploads");
- console.log("v.src = "+vtag.src);
- vtag.setAttribute("controls","");
- var list = document.getElementById("videos");
 
- list.appendChild(vtag);
-
-}
 // log requests
 
 app.use(logger());
