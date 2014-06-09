@@ -16,10 +16,10 @@
         video: {
           mandatory: {
             chromeMediaSource: 'screen',
-            minWidth: 1280,
-            maxWidth: 2560,
-            minHeight: 720,
-            maxHeight: 1440
+            minWidth: screen.width,
+            maxWidth: screen.width,
+            minHeight: screen.height,
+            maxHeight: screen.height
           }
         }
       }, function(stream) {
@@ -29,15 +29,19 @@
           stop();
         };
         localStream = stream;
+        recVideo={
+          width: screen.width,
+          height:screen.height
+        };
         window.recordRTC = RecordRTC(localStream, {
           type: "video",
           video: {
-            width: 640,
-            height: 480
+            width: recVideo.width,
+            height: recVideo.height
           },
           canvas: {
-            width: 640,
-            height: 480
+            width: recVideo.width,
+            height: recVideo.height
           }
 
         });
