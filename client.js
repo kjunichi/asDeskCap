@@ -2,10 +2,13 @@ var ipc = require('ipc');
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 var remote = require('remote');
+var path = require('path');
+var shell = require('shell');
 
-function addVideo(path) {
+function addVideo(file) {
+  console.log(file);
   var vtag = document.createElement("video");
-  vtag.src = "http://localhost:3000" + path.replace(__dirname + "/public/uploads", "/uploads");
+  vtag.src = "http://localhost:3000" + file.replace(__dirname + "/public/uploads", "/uploads");
   console.log("v.src = " + vtag.src);
   vtag.setAttribute("controls", "");
   var list = document.getElementById("videos");
@@ -15,7 +18,7 @@ function addVideo(path) {
   // ウィンドウを前面にもってくる
   remote.getCurrentWindow().hide();
   remote.getCurrentWindow().show();
-
+  shell.showItemInFolder(path.resolve(file));
 }
 
 function getWin32ChromePath() {
